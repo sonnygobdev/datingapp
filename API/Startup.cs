@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using API.BackgrounServices;
 using API.Data;
 using API.Extensions;
+using API.HubConfig;
 using API.Interfaces;
 using API.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -36,6 +38,7 @@ namespace API
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddApplicationServices(_config);
+            services.AddSignalR();
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
@@ -43,6 +46,8 @@ namespace API
             });
             services.AddCors();
             services.AddIdentityService(_config);
+            services.AddSingleton<ImportProcessingChannel>();
+            services.AddHostedService<ImportProcessingService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -60,7 +65,7 @@ namespace API
             app.UseRouting();
 
             app.UseCors(options=>{
-                options.AllowAnyHeader().AllowAnyMethod().WithOrigins("https://localhost:4200");
+                options.AllowAnyHeader().AllowAnyMethod().AllowCredentials().WithOrigins("https://localhost:4200");
             });
 
             app.UseAuthentication();
@@ -70,6 +75,7 @@ namespace API
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+                endpoints.MapHub<MessageHub>("/messenger");
             });
         }
     }
