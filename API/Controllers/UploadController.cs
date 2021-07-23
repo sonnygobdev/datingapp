@@ -19,7 +19,7 @@ namespace API.Controllers
     public class UploadController:BaseApiController
     {
         private readonly CacheManager _cacheManager;
-        private string connectionString = "DefaultEndpointsProtocol=https;AccountName=tekigaiwebjobstor;AccountKey=43VAOPlvk8L/X3nca0UZ+TSPyHSin2TqHeKCzkzb9SYdIJLlZ9Ht7lw1XtpT0NKuN5haWSP3UIYRYfDqjOMcJQ==;EndpointSuffix=core.windows.net";
+        private string connectionString = "";
 
         private ImportProcessingChannel _importProcessingChannel;    
 
